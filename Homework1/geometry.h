@@ -1,4 +1,5 @@
 #pragma once
+#define _USE_MATH_DEFINES
 #include <iostream>
 #include <vector>
 #include <cmath>
@@ -187,8 +188,12 @@ public:
 
 	RegularPolygon(const RegularPolygon& reg) : Polygon(reg) {}
 
+	float perimeter() const override {
+		return getN() * segment(getPoint(0), getPoint(1));
+	}
+
 	double area() const override {
-		return segment(getPoint(0), getPoint(1)) * segment(getPoint(1), getPoint(2));
+		return perimeter() * segment(getPoint(0), getPoint(1)) / (4 * tan(M_PI / getN()));
 	}
 
 	/*RegularPolygon& operator=(const RegularPolygon& reg){
