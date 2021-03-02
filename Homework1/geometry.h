@@ -5,13 +5,13 @@
 #include <cmath>
 
 using namespace std;
-
+//cpp
 class Point {
 public:
 	Point(float first = 0, float second = 0) : x(first), y(second) {}
 
 	Point(const Point& dot) : x(dot.x), y(dot.y){}
-
+	//todo that's strange
 	void set_coordinates(float first, float second) {
 		x = first;
 		y = second;
@@ -43,7 +43,7 @@ public:
 	}
 
 	PolygonalChain(const PolygonalChain& chain): N(chain.N), tops(chain.tops) {}
-
+//todo S P A C E S
 	PolygonalChain& operator=(const PolygonalChain& chain){
 		N = chain.N;
 		tops=chain.tops;
@@ -77,10 +77,12 @@ public:
 	}
 
 	virtual ~PolygonalChain() {
+		//todo destructor shouldn't do it, use default one
 		tops.clear();
 	}
 
 private:
+	//todo N is useless
 	int N;
 	vector<Point> tops;
 };
@@ -92,6 +94,7 @@ public:
 	ClosedPolygonalChain(const ClosedPolygonalChain& chain): PolygonalChain(chain) {}
 
 	float perimeter() const override {
+	//todo copy-paste with PolygonalChain
 		float P = 0;
 		for (int i = 1; i < getN(); i++)
 			P += segment(getPoint(i), getPoint(i-1));
@@ -113,7 +116,7 @@ public:
 	virtual double area() const{
 		double square = 0;
 		double a, b, c, p;
-		
+		//todo Heron's formula is bad
 		for (int i = 1; i < getN() - 1; i++) {
 			a = segment(getPoint(0), getPoint(i));
 			b = segment(getPoint(i + 1), getPoint(i));
@@ -135,7 +138,7 @@ public:
 	Triangle(const int number = 0, Point* points = nullptr) : Polygon(number, points) {}
 
 	Triangle(const Triangle& triag) : Polygon(triag) {}
-
+	//todo without sqrt
 	bool hasRightAngle() const {
 		double s = 2 * area();
 		double a = segment(getPoint(0), getPoint(1));

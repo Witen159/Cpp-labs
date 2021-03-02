@@ -1,7 +1,6 @@
 #include "geometry.h"
 #include <iostream>
 #include <cassert>
-#include <cmath>
 
 using namespace std;
 
@@ -14,14 +13,14 @@ void PointCheck() {
     assert(p2.getX() == 3 && p2.getY() == 4);
 }
 
-void InheritancePolygonalChainCheck(const PolygonalChain* pc, const PolygonalChain* cpc) {
+void InheritancePolygonalChainCheck(const PolygonalChain *pc, const PolygonalChain *cpc) {
     assert(pc->perimeter() == 9);
     assert(cpc->perimeter() == 12);
 }
 
 void PolygonsCheck() {
-    Point* a = new Point[3]{ Point(0, 0), Point(3, 4), Point(3, 0) };
-    Point* b = new Point[4]{ Point(0, 0), Point(1, 4), Point(3, 4), Point(3, 0) };
+    Point *a = new Point[3]{Point(0, 0), Point(3, 4), Point(3, 0)};
+    Point *b = new Point[4]{Point(0, 0), Point(1, 4), Point(3, 4), Point(3, 0)};
     const Polygon p(3, a);
     const Triangle t(3, a);
     const Trapezoid tr(4, b);
@@ -36,9 +35,9 @@ void PolygonsCheck() {
     assert(p.area() == 6);
     assert(abs(tr.height() - 4) < EPS);
     assert(t.hasRightAngle());
-    Triangle trSharpestAsMyHand(3, new Point[3]{ Point(0, 0), Point(1, 1), Point(0, 100) });
+    Triangle trSharpestAsMyHand(3, new Point[3]{Point(0, 0), Point(1, 1), Point(0, 100)});
     assert(!trSharpestAsMyHand.hasRightAngle());
-    RegularPolygon rp(4, new Point[4]{ Point(0, 0), Point(0, 2), Point(2, 2), Point(2, 0) });
+    RegularPolygon rp(4, new Point[4]{Point(0, 0), Point(0, 2), Point(2, 2), Point(2, 0)});
     assert(abs(rp.area() - 4) < EPS && abs(rp.perimeter() - 8) < EPS);
     Trapezoid tra(4, b);
     tra = tr;
