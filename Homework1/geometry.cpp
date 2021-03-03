@@ -86,18 +86,15 @@ Polygon::Polygon(const int number = 0, Point* points = nullptr) : ClosedPolygona
 Polygon::Polygon(const Polygon& figure) : ClosedPolygonalChain(figure) {}
 
 double Polygon::area() const {
-	double square = 0;
-	double a, b, c, p;
-	//todo Heron's formula is bad
-	for (int i = 1; i < getN() - 1; i++) {
-		a = segment(getPoint(0), getPoint(i));
-		b = segment(getPoint(i + 1), getPoint(i));
-		c = segment(getPoint(0), getPoint(i + 1));
-		p = (a + b + c) / 2;
-		square += sqrt(p * (p - a) * (p - b) * (p - c));
+	double buf_1 = 0, buf_2 = 0;
+	for (int i = 0; i < getN() - 1; i++) {
+		buf_1 += getPoint(i).getX() * getPoint(i + 1).getY();
+		buf_2 += getPoint(i).getY() * getPoint(i + 1).getX();
 	}
+	buf_1 += getPoint(getN() - 1).getX() * getPoint(0).getY();
+	buf_2 += getPoint(getN() - 1).getY() * getPoint(0).getX();
 
-	return square;
+	return abs(buf_1 - buf_2) / 2;
 }
 
 Triangle::Triangle(const int number = 0, Point* points = nullptr) : Polygon(number, points) {}
