@@ -75,19 +75,11 @@ PolygonalChain::~PolygonalChain() = default;
 //fixed operator= or remove constructor copy
 ClosedPolygonalChain::ClosedPolygonalChain(const int number = 0, Point* points = nullptr) : PolygonalChain(number, points) {}
 
-ClosedPolygonalChain::ClosedPolygonalChain(const ClosedPolygonalChain& chain) : PolygonalChain(chain) {}
-
 double ClosedPolygonalChain::perimeter() const {
 	return PolygonalChain::perimeter() + segment(getPoint(0), getPoint(getN() - 1));
 }
 
-ClosedPolygonalChain& ClosedPolygonalChain::operator=(const ClosedPolygonalChain& chain) {
-	PolygonalChain::operator=(chain);
-}
-
 Polygon::Polygon(const int number = 0, Point* points = nullptr) : ClosedPolygonalChain(number, points) {}
-
-Polygon::Polygon(const Polygon& figure) : ClosedPolygonalChain(figure) {}
 
 double Polygon::area() const {
 	double buf_1 = 0, buf_2 = 0;
@@ -101,13 +93,7 @@ double Polygon::area() const {
 	return abs(buf_1 - buf_2) / 2;
 }
 
-Polygon& Polygon::operator=(const Polygon& figure) {
-	ClosedPolygonalChain::operator=(figure);
-}
-
 Triangle::Triangle(const int number = 0, Point* points = nullptr) : Polygon(number, points) {}
-
-Triangle::Triangle(const Triangle& triag) : Polygon(triag) {}
 
 //fixed without sqrt
 bool Triangle::hasRightAngle() const {
@@ -121,13 +107,7 @@ bool Triangle::hasRightAngle() const {
 	return false;
 }
 
-Triangle& Triangle::operator=(const Triangle& triag) {
-	Polygon::operator=(triag);
-}
-
 Trapezoid::Trapezoid(const int number = 0, Point* points = nullptr) : Polygon(number, points) {}
-
-Trapezoid::Trapezoid(const Trapezoid& trap) : Polygon(trap) {}
 
 double Trapezoid::distance(Point p1, Point p2, Point p3) const {
 	Point* buf = new Point[3]{ p1, p2, p3 };
@@ -147,13 +127,7 @@ double Trapezoid::height() const {
 		return distance(getPoint(0), getPoint(1), getPoint(2));
 }
 
-Trapezoid& Trapezoid::operator=(const Trapezoid& trap) {
-	Polygon::operator=(trap);
-}
-
 RegularPolygon::RegularPolygon(const int number = 0, Point* points = nullptr) : Polygon(number, points) {}
-
-RegularPolygon::RegularPolygon(const RegularPolygon& reg) : Polygon(reg) {}
 
 double RegularPolygon::perimeter() const {
 	return getN() * segment(getPoint(0), getPoint(1));
@@ -161,8 +135,4 @@ double RegularPolygon::perimeter() const {
 
 double RegularPolygon::area() const {
 	return perimeter() * segment(getPoint(0), getPoint(1)) / (4 * tan(M_PI / getN()));
-}
-
-RegularPolygon& RegularPolygon::operator=(const RegularPolygon& reg) {
-	Polygon::operator=(reg);
 }
