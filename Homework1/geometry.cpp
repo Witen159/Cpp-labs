@@ -17,7 +17,6 @@ Point::Point(float first, float second) {
 }
 
 Point::Point(const Point& dot) : x(dot.x), y(dot.y) {}
-//fixed that's strange
 
 float Point::getX() const {
 	return this->x;
@@ -63,6 +62,7 @@ double PolygonalChain::segment(const Point p1, const Point p2) const {
 }
 
 double PolygonalChain::PolygonalChain::perimeter() const {
+	//todo capital
 	double P = 0;
 	for (int i = 1; i < getN(); i++)
 		P +=segment(this->tops[i], this->tops[i - 1]);
@@ -72,12 +72,12 @@ double PolygonalChain::PolygonalChain::perimeter() const {
 
 PolygonalChain::~PolygonalChain() = default;
 
+//todo operator= or remove constructor copy
 ClosedPolygonalChain::ClosedPolygonalChain(const int number = 0, Point* points = nullptr) : PolygonalChain(number, points) {}
 
 ClosedPolygonalChain::ClosedPolygonalChain(const ClosedPolygonalChain& chain) : PolygonalChain(chain) {}
 
 double ClosedPolygonalChain::perimeter() const {
-	//fixed copy-paste with PolygonalChain
 	return PolygonalChain::perimeter() + segment(getPoint(0), getPoint(getN() - 1));
 }
 
@@ -106,7 +106,7 @@ bool Triangle::hasRightAngle() const {
 	double a = pow(getPoint(0).getX() - getPoint(1).getX(), 2.0) + pow(getPoint(0).getY() - getPoint(1).getY(), 2.0);
 	double b = pow(getPoint(0).getX() - getPoint(2).getX(), 2.0) + pow(getPoint(0).getY() - getPoint(2).getY(), 2.0);
 	double c = pow(getPoint(1).getX() - getPoint(2).getX(), 2.0) + pow(getPoint(1).getY() - getPoint(2).getY(), 2.0);
-
+	//todo true
 	if (a + b == c || a + c == b || b + c == a)
 		return 1;
 
