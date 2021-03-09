@@ -29,7 +29,7 @@ class PolygonalChain {
 public:
 	PolygonalChain(const int number, Point* points);
 
-	PolygonalChain(const PolygonalChain& chain);
+	virtual PolygonalChain(const PolygonalChain& chain);
 
 	PolygonalChain& operator=(const PolygonalChain& chain);
 
