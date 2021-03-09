@@ -62,23 +62,27 @@ double PolygonalChain::segment(const Point p1, const Point p2) const {
 }
 
 double PolygonalChain::PolygonalChain::perimeter() const {
-	//todo capital
-	double P = 0;
+	//fixed capital
+	double p = 0;
 	for (int i = 1; i < getN(); i++)
-		P +=segment(this->tops[i], this->tops[i - 1]);
+		p +=segment(this->tops[i], this->tops[i - 1]);
 
-	return P;
+	return p;
 }
 
 PolygonalChain::~PolygonalChain() = default;
 
-//todo operator= or remove constructor copy
+//fixed operator= or remove constructor copy
 ClosedPolygonalChain::ClosedPolygonalChain(const int number = 0, Point* points = nullptr) : PolygonalChain(number, points) {}
 
 ClosedPolygonalChain::ClosedPolygonalChain(const ClosedPolygonalChain& chain) : PolygonalChain(chain) {}
 
 double ClosedPolygonalChain::perimeter() const {
 	return PolygonalChain::perimeter() + segment(getPoint(0), getPoint(getN() - 1));
+}
+
+ClosedPolygonalChain& ClosedPolygonalChain::operator=(const ClosedPolygonalChain& chain) {
+	PolygonalChain::operator=(chain);
 }
 
 Polygon::Polygon(const int number = 0, Point* points = nullptr) : ClosedPolygonalChain(number, points) {}
@@ -97,6 +101,10 @@ double Polygon::area() const {
 	return abs(buf_1 - buf_2) / 2;
 }
 
+Polygon& Polygon::operator=(const Polygon& figure) {
+	ClosedPolygonalChain::operator=(figure);
+}
+
 Triangle::Triangle(const int number = 0, Point* points = nullptr) : Polygon(number, points) {}
 
 Triangle::Triangle(const Triangle& triag) : Polygon(triag) {}
@@ -106,11 +114,15 @@ bool Triangle::hasRightAngle() const {
 	double a = pow(getPoint(0).getX() - getPoint(1).getX(), 2.0) + pow(getPoint(0).getY() - getPoint(1).getY(), 2.0);
 	double b = pow(getPoint(0).getX() - getPoint(2).getX(), 2.0) + pow(getPoint(0).getY() - getPoint(2).getY(), 2.0);
 	double c = pow(getPoint(1).getX() - getPoint(2).getX(), 2.0) + pow(getPoint(1).getY() - getPoint(2).getY(), 2.0);
-	//todo true
+	//fixed true
 	if (a + b == c || a + c == b || b + c == a)
-		return 1;
+		return true;
 
-	return 0;
+	return false;
+}
+
+Triangle& Triangle::operator=(const Triangle& triag) {
+	Polygon::operator=(triag);
 }
 
 Trapezoid::Trapezoid(const int number = 0, Point* points = nullptr) : Polygon(number, points) {}
@@ -135,6 +147,10 @@ double Trapezoid::height() const {
 		return distance(getPoint(0), getPoint(1), getPoint(2));
 }
 
+Trapezoid& Trapezoid::operator=(const Trapezoid& trap) {
+	Polygon::operator=(trap);
+}
+
 RegularPolygon::RegularPolygon(const int number = 0, Point* points = nullptr) : Polygon(number, points) {}
 
 RegularPolygon::RegularPolygon(const RegularPolygon& reg) : Polygon(reg) {}
@@ -145,4 +161,8 @@ double RegularPolygon::perimeter() const {
 
 double RegularPolygon::area() const {
 	return perimeter() * segment(getPoint(0), getPoint(1)) / (4 * tan(M_PI / getN()));
+}
+
+RegularPolygon& RegularPolygon::operator=(const RegularPolygon& reg) {
+	Polygon::operator=(reg);
 }
