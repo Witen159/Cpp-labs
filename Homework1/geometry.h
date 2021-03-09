@@ -58,8 +58,6 @@ public:
 	ClosedPolygonalChain(const ClosedPolygonalChain& chain);
 
 	double perimeter() const override;
-	
-	ClosedPolygonalChain& operator=(const ClosedPolygonalChain& chain);
 };
 
 class Polygon : public ClosedPolygonalChain {
@@ -69,8 +67,6 @@ public:
 	Polygon(const Polygon& figure);
 
 	virtual double area() const;
-	
-	Polygon& operator=(const Polygon& figure);
 };
 
 class Triangle : public Polygon {
@@ -80,8 +76,6 @@ public:
 	Triangle(const Triangle& triag);
 
 	bool hasRightAngle() const;
-	
-	Triangle& operator=(const Triangle& triag);
 };
 
 class Trapezoid : public Polygon {
@@ -92,8 +86,6 @@ public:
 
 	double height() const;
 	
-	Trapezoid& operator=(const Trapezoid& trap);
-
 private:
 	double distance(Point p1, Point p2, Point p3) const;
 };
@@ -107,6 +99,4 @@ public:
 	double perimeter() const override;
 
 	double area() const override;
-	
-	RegularPolygon& operator=(const RegularPolygon& reg);
 };
