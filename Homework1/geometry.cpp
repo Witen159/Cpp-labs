@@ -38,7 +38,6 @@ PolygonalChain::PolygonalChain(const int number = 0, Point* points = nullptr) {
 }
 
 PolygonalChain::PolygonalChain(const PolygonalChain& chain) : tops(chain.tops) {}
-//fixed S P A C E S
 PolygonalChain& PolygonalChain::operator=(const PolygonalChain& chain) {
 	this->tops = chain.getTops();
 	return *this;
@@ -62,7 +61,6 @@ double PolygonalChain::segment(const Point p1, const Point p2) const {
 }
 
 double PolygonalChain::PolygonalChain::perimeter() const {
-	//fixed capital
 	double p = 0;
 	for (int i = 1; i < getN(); i++)
 		p +=segment(this->tops[i], this->tops[i - 1]);
@@ -72,7 +70,6 @@ double PolygonalChain::PolygonalChain::perimeter() const {
 
 PolygonalChain::~PolygonalChain() = default;
 
-//fixed operator= or remove constructor copy
 ClosedPolygonalChain::ClosedPolygonalChain(const int number = 0, Point* points = nullptr) : PolygonalChain(number, points) {}
 
 double ClosedPolygonalChain::perimeter() const {

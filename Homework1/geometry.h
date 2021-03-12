@@ -5,7 +5,6 @@
 #include <cmath>
 
 using namespace std;
-//fixed cpp
 class Point {
 public:
 	Point();
