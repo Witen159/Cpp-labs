@@ -49,11 +49,9 @@ public:
 
     int operator[] (int num) const;
 
-    //int& operator[] (const int num);
+    int& operator[](int num);
 
     double get (int num);
-
-
 
     ~Polynomial();
 

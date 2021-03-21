@@ -25,10 +25,11 @@ void PolynomialOperators() {
     const auto d = Polynomial();
     const auto e = Polynomial(0, 2, new int[3]{ 0, 3, -3 });
     const auto f = Polynomial(-2, 2, new int[5]{ 1, 0, 0, 0, 1 });
-//    assert(a * b == b * a);
-//    assert(d * e == d);
-//    assert(a * b * c == a * (b * c));
-//    assert(a * b == Polynomial(1, 4, new int[4]{ -3, -2, -1, 12 }));
+    assert(a * b == b * a);
+    cout << d << endl << e << endl << d * e << endl;
+    assert(d * e == d);
+    assert(a * b * c == a * (b * c));
+    assert(a * b == Polynomial(1, 4, new int[4]{ -3, -2, -1, 12 }));
     assert(a + b == b + a);
     assert(d + e == e);
     assert(a + b + c == a + (b + c));
@@ -38,22 +39,19 @@ void PolynomialOperators() {
     assert(c.get(4) == -18.75);
     assert(a[1] == 2);
     assert(a[10] == 0);
-//    c[5] = 3;
-//    assert(c.get(4) == 3053.25);
+    c[5] = 3;
+    assert(c.get(4) == 3053.25);
     assert((-c) == (-(-(-c))));
     auto h = -c;
-//    assert(c[5] == 3 && h[5] == -3);
-//    assert((-c)[5] == -3);
+    assert(c[5] == 3 && h[5] == -3);
+    assert((-c)[5] == -3);
     auto g = b;
-//    g[3] = 0;
+    g[3] = 0;
     assert(g == b);
 }
 
 int main() {
     checkOut();
     PolynomialOperators();
-//    auto a = Polynomial(0, 2, new int[3]{ 1, 2, 3 });
-//    auto b = Polynomial(1, 2, new int[2]{ -3, 4 });
-//    cout << a + b << endl;
     return 0;
 }

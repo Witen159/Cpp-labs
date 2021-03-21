@@ -21,13 +21,6 @@ Polynomial::Polynomial(int first, int second, const int *mas) : min_pow(first), 
 Polynomial::Polynomial(const Polynomial &pol) = default;
 
 Polynomial &Polynomial::operator=(const Polynomial &pol) = default;
-//        {
-//    min_pow = pol.min_pow;
-//    max_pow = pol.max_pow;
-//    n = pol.n;
-//    constants = pol.constants;
-//    return *this;
-//}
 
 bool operator==(const Polynomial &left, const Polynomial &right) {
     stringstream s1, s2;
@@ -41,10 +34,10 @@ bool operator!=(const Polynomial &left, const Polynomial &right) {
 }
 
 Polynomial operator-(const Polynomial &pol) {
-    auto temp = pol;
-    for (int i = 0; i < temp.n; i++)
-        pol.constants[i] = -pol.constants[i];
-    return temp;
+    int *temp = new int[pol.n];
+    for (int i = 0; i < pol.n; i++)
+        temp[i] = -pol.constants[i];
+    return Polynomial(pol.min_pow, pol.max_pow, temp);
 }
 
 Polynomial &Polynomial::operator+=(const Polynomial &pol) {
@@ -70,8 +63,25 @@ Polynomial &Polynomial::operator+=(const Polynomial &pol) {
     return *this;
 }
 
-Polynomial &Polynomial::operator*=(const Polynomial &pol) {
+Polynomial operator*(const Polynomial& left, const Polynomial& right) {
+    int new_min = left.min_pow + right.min_pow;
+    int new_max = left.max_pow + right.max_pow;
+    unsigned new_n = new_max - new_min + 1;
+    int *new_mass = new int[new_n];
 
+    for (int i = 0; i < new_n; i++)
+        new_mass[i] = 0;
+
+    for (int i = 0; i < left.n; i++)
+        for (int j = 0; j < right.n; j++)
+            new_mass[left.min_pow + i + right.min_pow + j - new_min] += left.constants[i] * right.constants[j];
+
+    return Polynomial(new_min, new_max, new_mass);
+}
+
+Polynomial &Polynomial::operator*=(const Polynomial &pol) {
+    *this = (*this) * pol;
+    return *this;
 }
 
 Polynomial &Polynomial::operator*=(int num) {
@@ -84,21 +94,21 @@ Polynomial &Polynomial::operator/=(int num) {
     return *this;
 }
 
-Polynomial operator*(const Polynomial& pol, int num) {
+Polynomial operator*(const Polynomial &pol, int num) {
     int *temp = new int[pol.n];
     for (int i = 0; i < pol.n; i++)
-        temp[i]=pol.constants[i] * num;
+        temp[i] = pol.constants[i] * num;
     return Polynomial(pol.min_pow, pol.max_pow, temp);
 }
 
-Polynomial operator*(int num, const Polynomial& pol) {
+Polynomial operator*(int num, const Polynomial &pol) {
     return pol * num;
 }
 
-Polynomial operator/(const Polynomial& pol, int num) {
+Polynomial operator/(const Polynomial &pol, int num) {
     int *temp = new int[pol.n];
     for (int i = 0; i < pol.n; i++)
-        temp[i]=pol.constants[i] / num;
+        temp[i] = pol.constants[i] / num;
     return Polynomial(pol.min_pow, pol.max_pow, temp);
 }
 
@@ -113,9 +123,21 @@ int Polynomial::operator[](int num) const {
     return constants[num - min_pow];
 }
 
-//int& Polynomial::operator[] (const int num) {
-//
-//}
+int &Polynomial::operator[](int num) {
+    if (num < min_pow || num > max_pow) {
+        int new_min = min(min_pow, num);
+        int new_max = max(max_pow, num);
+        int *temp = new int[new_max - new_min + 1];
+        Polynomial t(new_min, new_max, temp);
+
+        for (int i = max(min_pow, new_min); i <= min(max_pow, new_max); i++) {
+            t.constants[i - new_min] = constants[i - min_pow];
+        }
+
+        *this = t;
+    }
+    return constants[num - min_pow];
+}
 
 Polynomial operator+(const Polynomial &left, const Polynomial &right) {
     auto d = left;
@@ -130,8 +152,12 @@ Polynomial operator-(const Polynomial &left, const Polynomial &right) {
 }
 
 ostream &operator<<(ostream &out, const Polynomial &pol) {
+    bool check = true;
+    for (int i = 0; i < pol.n; i++)
+        if (pol.constants[i] != 0)
+            check = false;
 
-    if (pol.max_pow - pol.min_pow == 0) {
+    if (check) {
         out << pol.constants[0];
         return out;
     }
