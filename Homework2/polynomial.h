@@ -11,7 +11,7 @@ class Polynomial {
 public:
     Polynomial();
 
-    Polynomial(const int first, const int second, const int* mas);
+    Polynomial( int first, int second, const int* mas);
 
     Polynomial(const Polynomial& pol);
 
@@ -33,13 +33,33 @@ public:
 
     Polynomial& operator-= (const Polynomial& pol);
 
+    Polynomial& operator*= (const Polynomial& pol);
+
+    Polynomial& operator*= (int num);
+
+    Polynomial& operator/= (int num);
+
+    friend Polynomial operator*(const Polynomial& left, const Polynomial& right);
+
+    friend Polynomial operator*(const Polynomial& pol, int num);
+
+    friend Polynomial operator*(int num, const Polynomial& pol);
+
+    friend Polynomial operator/(const Polynomial& pol, int num);
+
+    int operator[] (int num) const;
+
+    //int& operator[] (const int num);
+
+    double get (int num);
+
 
 
     ~Polynomial();
 
 private:
-    int min_pow;
-    int max_pow;
-    int* constants;
-    unsigned n;
+    int min_pow{};
+    int max_pow{};
+    int* constants{};
+    unsigned n{};
 };
