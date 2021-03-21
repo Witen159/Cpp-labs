@@ -2,33 +2,44 @@
 #include <iostream>
 #include <vector>
 #include <cmath>
+#include <string>
+#include <sstream>
 
 using namespace std;
 
 class Polynomial {
 public:
-	Polynomial();
+    Polynomial();
 
-	Polynomial(const int first, const int second, int* mas);
+    Polynomial(const int first, const int second, const int* mas);
 
-	Polynomial(const Polynomial& pol);
+    Polynomial(const Polynomial& pol);
 
-	Polynomial& operator=(const Polynomial& pol);
+    Polynomial& operator=(const Polynomial& pol);
 
-	bool operator==(const Polynomial& pol);
+    friend ostream& operator<< (ostream& out, const Polynomial& pol);
 
-	bool operator!=(const Polynomial& pol);
+    friend bool operator==(const Polynomial& left, const Polynomial& right);
 
-	Polynomial& operator+ (const Polynomial& pol);
+    friend bool operator!=(const Polynomial& left, const Polynomial& right);
 
-	/*int get_min() const;
+    friend Polynomial operator+(const Polynomial& left, const Polynomial& right);
 
-	int get_max() const;*/
+    friend Polynomial operator-(const Polynomial& left, const Polynomial& right);
 
-	~Polynomial();
+    friend Polynomial operator-(const Polynomial& pol);
+
+    Polynomial& operator+= (const Polynomial& pol);
+
+    Polynomial& operator-= (const Polynomial& pol);
+
+
+
+    ~Polynomial();
 
 private:
-	int min_pow;
-	int max_pow;
-	vector<int>* constants;
+    int min_pow;
+    int max_pow;
+    int* constants;
+    unsigned n;
 };
