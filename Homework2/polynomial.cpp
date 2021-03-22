@@ -1,4 +1,3 @@
-#include <iostream>
 #include <vector>
 #include <cmath>
 #include "polynomial.h"
@@ -127,28 +126,28 @@ int &Polynomial::operator[](int num) {
     if (num < min_pow || num > max_pow) {
         int new_min = min(min_pow, num);
         int new_max = max(max_pow, num);
-        int *temp = new int[new_max - new_min + 1];
-        Polynomial t(new_min, new_max, temp);
+        int *mass = new int[new_max - new_min + 1];
+        Polynomial temp(new_min, new_max, mass);
 
         for (int i = max(min_pow, new_min); i <= min(max_pow, new_max); i++) {
-            t.constants[i - new_min] = constants[i - min_pow];
+            temp.constants[i - new_min] = constants[i - min_pow];
         }
 
-        *this = t;
+        *this = temp;
     }
     return constants[num - min_pow];
 }
 
 Polynomial operator+(const Polynomial &left, const Polynomial &right) {
-    auto d = left;
-    d += right;
-    return d;
+    auto temp = left;
+    temp += right;
+    return temp;
 }
 
 Polynomial operator-(const Polynomial &left, const Polynomial &right) {
-    auto d = left;
-    d -= right;
-    return d;
+    auto temp = left;
+    temp -= right;
+    return temp;
 }
 
 ostream &operator<<(ostream &out, const Polynomial &pol) {
