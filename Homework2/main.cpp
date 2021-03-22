@@ -26,7 +26,6 @@ void PolynomialOperators() {
     const auto e = Polynomial(0, 2, new int[3]{ 0, 3, -3 });
     const auto f = Polynomial(-2, 2, new int[5]{ 1, 0, 0, 0, 1 });
     assert(a * b == b * a);
-    cout << d << endl << e << endl << d * e << endl;
     assert(d * e == d);
     assert(a * b * c == a * (b * c));
     assert(a * b == Polynomial(1, 4, new int[4]{ -3, -2, -1, 12 }));

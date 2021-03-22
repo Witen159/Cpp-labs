@@ -43,7 +43,7 @@ Polynomial operator-(const Polynomial &pol) {
 Polynomial &Polynomial::operator+=(const Polynomial &pol) {
     int new_min = min(min_pow, pol.min_pow);
     int new_max = max(max_pow, pol.max_pow);
-    unsigned new_n = new_max - new_min + 1;
+    int new_n = new_max - new_min + 1;
     int *new_mass = new int[new_n];
 
     for (int i = 0; i < new_n; i++)
@@ -66,7 +66,7 @@ Polynomial &Polynomial::operator+=(const Polynomial &pol) {
 Polynomial operator*(const Polynomial& left, const Polynomial& right) {
     int new_min = left.min_pow + right.min_pow;
     int new_max = left.max_pow + right.max_pow;
-    unsigned new_n = new_max - new_min + 1;
+    int new_n = new_max - new_min + 1;
     int *new_mass = new int[new_n];
 
     for (int i = 0; i < new_n; i++)
