@@ -99,7 +99,8 @@ Polynomial &Polynomial::operator*=(const Polynomial &pol) {
 }
 
 Polynomial &Polynomial::operator*=(int num) {
-    *this = *this * num;
+    for (int i = 0; i < n; i++)
+        constants[i] *= num;
     return *this;
 }
 
@@ -110,10 +111,9 @@ Polynomial &Polynomial::operator/=(int num) {
 }
 
 Polynomial operator*(const Polynomial &pol, int num) {
-    int *temp = new int[pol.n];
-    for (int i = 0; i < pol.n; i++)
-        temp[i] = pol.constants[i] * num;
-    return Polynomial(pol.min_pow, pol.max_pow, temp);
+    auto temp = pol;
+    temp *= num;
+    return temp;
 }
 
 Polynomial operator*(int num, const Polynomial &pol) {
