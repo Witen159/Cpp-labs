@@ -127,13 +127,12 @@ int &Polynomial::operator[](int num) {
         int new_min = min(min_pow, num);
         int new_max = max(max_pow, num);
         int *mass = new int[new_max - new_min + 1];
+        for (int i = 0; i < new_max - new_min + 1; i++) {
+            mass[i] = 0;
+        }
         Polynomial temp(new_min, new_max, mass);
 
-        for (int i = max(min_pow, new_min); i <= min(max_pow, new_max); i++) {
-            temp.constants[i - new_min] = constants[i - min_pow];
-        }
-
-        *this = temp;
+        *this += temp;
     }
     return constants[num - min_pow];
 }
