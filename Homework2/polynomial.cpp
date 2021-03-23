@@ -2,6 +2,7 @@
 #include <cmath>
 #include "polynomial.h"
 #include <sstream>
+#include <algorithm>
 
 using namespace std;
 
@@ -10,12 +11,12 @@ Polynomial::Polynomial() : min_pow(0), max_pow(0) {
     constants = new int[1]{0};
 }
 
-//todo mas
-Polynomial::Polynomial(int first, int second, const int *mas) : min_pow(first), max_pow(second) {
+//fixed mas
+Polynomial::Polynomial(int first, int second, const int *mass) : min_pow(first), max_pow(second) {
     n = second - first + 1;
     constants = new int[n];
     for (int i = 0; i < n; i++)
-        constants[i] = mas[i];
+        constants[i] = mass[i];
 }
 
 Polynomial::Polynomial(const Polynomial &pol) {
@@ -28,10 +29,11 @@ Polynomial::Polynomial(const Polynomial &pol) {
 }
 
 Polynomial &Polynomial::operator=(const Polynomial &pol) {
-    //todo delete
+    //fixed delete
     min_pow = pol.min_pow;
     max_pow = pol.max_pow;
     n = pol.n;
+    delete[] constants;
     constants = new int[n];
     for (int i = 0; i < n; i++)
         constants[i] = pol.constants[i];
@@ -107,9 +109,8 @@ Polynomial &Polynomial::operator*=(const Polynomial &pol) {
 }
 
 Polynomial &Polynomial::operator*=(int num) {
-    //todo for_each
-    for (int i = 0; i < n; i++)
-        constants[i] *= num;
+    //fixed for_each
+    for_each(constants, constants + n, [&](int& x) {x *= num;});
     return *this;
 }
 
@@ -150,12 +151,13 @@ int &Polynomial::operator[](int num) {
     if (num < min_pow || num > max_pow) {
         int new_min = min(min_pow, num);
         int new_max = max(max_pow, num);
-        //todo memory-leak
+        //fixed memory-leak
         int *mass = new int[new_max - new_min + 1];
         for (int i = 0; i < new_max - new_min + 1; i++) {
             mass[i] = 0;
         }
         Polynomial temp(new_min, new_max, mass);
+        delete[] mass;
 
         *this += temp;
     }
@@ -208,12 +210,17 @@ ostream &operator<<(ostream &out, const Polynomial &pol) {
     return out;
 }
 
-//todo get O(n)
+//fixed get O(n)
 double Polynomial::get(int num) {
-    double temp = 0;
-    for (int i = 0; i < n; i++)
-        temp += pow((double) num, i + min_pow) * constants[i];
-    return temp;
+    double temp = constants[0] * pow(num, min_pow);
+    double res = temp;
+
+    for (int i = 1; i < n; i++) {
+        temp *= num;
+        res += constants[i] * temp;
+    }
+
+    return res;
 }
 
 Polynomial::~Polynomial() {
