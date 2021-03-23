@@ -78,23 +78,29 @@ Polynomial &Polynomial::operator+=(const Polynomial &pol) {
 }
 
 Polynomial operator*(const Polynomial &left, const Polynomial &right) {
-    int new_min = left.min_pow + right.min_pow;
-    int new_max = left.max_pow + right.max_pow;
+    auto temp = left;
+    temp *= right;
+    return temp;
+}
+
+Polynomial &Polynomial::operator*=(const Polynomial &pol) {
+    int new_min = min_pow + pol.min_pow;
+    int new_max = max_pow + pol.max_pow;
     int new_n = new_max - new_min + 1;
     int *new_mass = new int[new_n];
 
     for (int i = 0; i < new_n; i++)
         new_mass[i] = 0;
 
-    for (int i = 0; i < left.n; i++)
-        for (int j = 0; j < right.n; j++)
-            new_mass[left.min_pow + i + right.min_pow + j - new_min] += left.constants[i] * right.constants[j];
+    for (int i = 0; i < n; i++)
+        for (int j = 0; j < pol.n; j++)
+            new_mass[min_pow + i + pol.min_pow + j - new_min] += constants[i] * pol.constants[j];
 
-    return Polynomial(new_min, new_max, new_mass);
-}
+    min_pow = new_min;
+    max_pow = new_max;
+    n = new_n;
+    constants = new_mass;
 
-Polynomial &Polynomial::operator*=(const Polynomial &pol) {
-    *this = (*this) * pol;
     return *this;
 }
 
