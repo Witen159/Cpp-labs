@@ -192,5 +192,5 @@ double Polynomial::get(int num) {
 }
 
 Polynomial::~Polynomial() {
-    delete constants;
+    delete[] constants;
 }
