@@ -10,6 +10,7 @@ Polynomial::Polynomial() : min_pow(0), max_pow(0) {
     constants = new int[1]{0};
 }
 
+//todo mas
 Polynomial::Polynomial(int first, int second, const int *mas) : min_pow(first), max_pow(second) {
     n = second - first + 1;
     constants = new int[n];
@@ -27,6 +28,7 @@ Polynomial::Polynomial(const Polynomial &pol) {
 }
 
 Polynomial &Polynomial::operator=(const Polynomial &pol) {
+    //todo delete
     min_pow = pol.min_pow;
     max_pow = pol.max_pow;
     n = pol.n;
@@ -105,6 +107,7 @@ Polynomial &Polynomial::operator*=(const Polynomial &pol) {
 }
 
 Polynomial &Polynomial::operator*=(int num) {
+    //todo for_each
     for (int i = 0; i < n; i++)
         constants[i] *= num;
     return *this;
@@ -147,6 +150,7 @@ int &Polynomial::operator[](int num) {
     if (num < min_pow || num > max_pow) {
         int new_min = min(min_pow, num);
         int new_max = max(max_pow, num);
+        //todo memory-leak
         int *mass = new int[new_max - new_min + 1];
         for (int i = 0; i < new_max - new_min + 1; i++) {
             mass[i] = 0;
@@ -204,6 +208,7 @@ ostream &operator<<(ostream &out, const Polynomial &pol) {
     return out;
 }
 
+//todo get O(n)
 double Polynomial::get(int num) {
     double temp = 0;
     for (int i = 0; i < n; i++)
