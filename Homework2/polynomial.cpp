@@ -11,7 +11,6 @@ Polynomial::Polynomial() : min_pow(0), max_pow(0) {
     constants = new int[1]{0};
 }
 
-//fixed mas
 Polynomial::Polynomial(int first, int second, const int *mass) : min_pow(first), max_pow(second) {
     n = second - first + 1;
     constants = new int[n];
@@ -29,7 +28,6 @@ Polynomial::Polynomial(const Polynomial &pol) {
 }
 
 Polynomial &Polynomial::operator=(const Polynomial &pol) {
-    //fixed delete
     min_pow = pol.min_pow;
     max_pow = pol.max_pow;
     n = pol.n;
@@ -52,6 +50,7 @@ bool operator!=(const Polynomial &left, const Polynomial &right) {
 }
 
 Polynomial operator-(const Polynomial &pol) {
+    //todo memory leak
     int *temp = new int[pol.n];
     for (int i = 0; i < pol.n; i++)
         temp[i] = -pol.constants[i];
@@ -62,6 +61,7 @@ Polynomial &Polynomial::operator+=(const Polynomial &pol) {
     int new_min = min(min_pow, pol.min_pow);
     int new_max = max(max_pow, pol.max_pow);
     int new_n = new_max - new_min + 1;
+    //todo mas
     int *new_mass = new int[new_n];
 
     for (int i = 0; i < new_n; i++)
@@ -103,6 +103,7 @@ Polynomial &Polynomial::operator*=(const Polynomial &pol) {
     min_pow = new_min;
     max_pow = new_max;
     n = new_n;
+    //todo another memory leak
     constants = new_mass;
 
     return *this;
@@ -136,6 +137,7 @@ Polynomial operator/(const Polynomial &pol, int num) {
     return temp;
 }
 
+//todo without creating new object
 Polynomial &Polynomial::operator-=(const Polynomial &pol) {
     *this += (-pol);
     return *this;
@@ -151,7 +153,6 @@ int &Polynomial::operator[](int num) {
     if (num < min_pow || num > max_pow) {
         int new_min = min(min_pow, num);
         int new_max = max(max_pow, num);
-        //fixed memory-leak
         int *mass = new int[new_max - new_min + 1];
         for (int i = 0; i < new_max - new_min + 1; i++) {
             mass[i] = 0;
@@ -210,7 +211,6 @@ ostream &operator<<(ostream &out, const Polynomial &pol) {
     return out;
 }
 
-//fixed get O(n)
 double Polynomial::get(int num) {
     double temp = constants[0] * pow(num, min_pow);
     double res = temp;
