@@ -150,10 +150,10 @@ Polynomial operator/(const Polynomial& pol, int num) {
 }
 
 //fixed without creating new object
-Polynomial& Polynomial::operator-=(Polynomial& pol) {
-    pol.minus();
+Polynomial& Polynomial::operator-=(const Polynomial& pol) {
+    *this *= -1;
     *this += pol;
-    pol.minus();
+    *this *= -1;
     return *this;
 }
 
@@ -185,7 +185,7 @@ Polynomial operator+(const Polynomial& left, const Polynomial& right) {
     return temp;
 }
 
-Polynomial operator-(const Polynomial& left, Polynomial& right) {
+Polynomial operator-(const Polynomial& left, const Polynomial& right) {
     auto temp = left;
     temp -= right;
     return temp;
@@ -236,11 +236,6 @@ double Polynomial::get(int num) {
     }
 
     return res;
-}
-
-void Polynomial::minus() {
-    for (int i = 1; i < n; i++)
-        constants[i] = -constants[i];
 }
 
 Polynomial::~Polynomial() {

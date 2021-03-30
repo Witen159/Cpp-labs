@@ -26,13 +26,13 @@ public:
 
     friend Polynomial operator+(const Polynomial& left, const Polynomial& right);
 
-    friend Polynomial operator-(const Polynomial& left, Polynomial& right);
+    friend Polynomial operator-(const Polynomial& left, const Polynomial& right);
 
     friend Polynomial operator-(const Polynomial& pol);
 
     Polynomial& operator+=(const Polynomial& pol);
 
-    Polynomial& operator-=(Polynomial& pol);
+    Polynomial& operator-=(const Polynomial& pol);
 
     Polynomial& operator*=(const Polynomial& pol);
 
@@ -55,8 +55,6 @@ public:
     double get(int num);
 
     ~Polynomial();
-
-    void minus();
 
 private:
     int min_pow;
