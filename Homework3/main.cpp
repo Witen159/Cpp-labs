@@ -1,7 +1,5 @@
 #include "Magic_book.hpp"
 
-using namespace std;
-
 int main() {
 
     Magic_stick spell;
