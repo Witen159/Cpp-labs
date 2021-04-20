@@ -16,7 +16,7 @@ vector<string>& splitstring::split(char delim, int rep) {
     if (!flds.empty()) flds.clear();
     string work = data();
     string buf = "";
-    int i = 0;
+    unsigned int i = 0;
     while (i < work.length()) {
         if (work[i] != delim)
             buf += work[i];
@@ -37,6 +37,8 @@ vector<string>& splitstring::split(char delim, int rep) {
 
 Reader_routes::Reader_routes(){
     pugi::xml_parse_result result = doc.load_file("data/data_routes.xml");
+    if (!result)
+        cout << "Smth strange" << endl;
     Routes temp;
     string id, prev = "";
 
@@ -64,7 +66,7 @@ void Reader_routes::max_lenth_route() const {
     float max_train = 0, max_trolleybus = 0, max_bus = 0;
     string train_route, trolleybus_route, bus_route;
     Routes temp;
-    for (int i = 0; i < routes.size(); ++i) {
+    for (size_t i = 0; i < routes.size(); ++i) {
         temp = routes[i];
         if (temp.transport_type == "Трамвай") {
             if (temp.lenth > max_train) {
@@ -96,7 +98,7 @@ void Reader_routes::max_stops_route() const {
     int max_train = 0, max_trolleybus = 0, max_bus = 0;
     string train_route, trolleybus_route, bus_route;
     Routes temp;
-    for (int i = 0; i < routes.size(); ++i) {
+    for (size_t i = 0; i < routes.size(); ++i) {
         temp = routes[i];
         if (temp.transport_type == "Трамвай") {
             if (temp.lenth > max_train) {
@@ -126,6 +128,8 @@ void Reader_routes::max_stops_route() const {
 
 Reader_stops::Reader_stops(){
     pugi::xml_parse_result result = doc.load_file("data/data_stops.xml");
+    if (!result)
+        cout << "Smth strange" << endl;
 
     string temp;
     vector <string> location;
@@ -148,20 +152,20 @@ Reader_stops::Reader_stops(){
             location.push_back(temp);
         }
 
-        for (int i = 0; i < location.size(); ++i) {
+        for (size_t i = 0; i < location.size(); ++i) {
             if (i > 0)
                 location[i].erase(0, 1);
             
             location[i].erase(remove(location[i].begin(), location[i].end(), '.'), location[i].end());
 
-            for (int j = 0; j < unnec.size(); ++j) {
+            for (size_t j = 0; j < unnec.size(); ++j) {
                 if ((pos = location[i].find(unnec[j])) != string::npos) {
                     location[i].erase(pos, unnec[j].size());
                 }
             }
         }
 
-        for (int i = 0; i < location.size(); ++i) {
+        for (size_t i = 0; i < location.size(); ++i) {
             string name = location[i];
             auto iter = streets.find(name);
             if (iter != streets.end()) {
