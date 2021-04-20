@@ -5,17 +5,17 @@
 #include <math.h>
 #include <windows.h>
 
-class splitstring : public string {
-    vector<string> flds;
+class splitstring : public std::string {
+    std::vector<std::string> flds;
 public:
-    splitstring(const string& s) : string(s) { };
-    vector<string>& split(char delim, int rep = 0);
+    splitstring(const std::string& s) : std::string(s) { };
+    std::vector<std::string>& split(char delim, int rep = 0);
 };
 
-vector<string>& splitstring::split(char delim, int rep) {
+std::vector<std::string>& splitstring::split(char delim, int rep) {
     if (!flds.empty()) flds.clear();
-    string work = data();
-    string buf = "";
+    std::string work = data();
+    std::string buf = "";
     unsigned int i = 0;
     while (i < work.length()) {
         if (work[i] != delim)
@@ -38,21 +38,21 @@ vector<string>& splitstring::split(char delim, int rep) {
 Reader_routes::Reader_routes(){
     pugi::xml_parse_result result = doc.load_file("data/data_routes.xml");
     if (!result)
-        cout << "Smth strange" << endl;
+        std::cout << "Smth strange" << std::endl;
     Routes temp;
-    string id, prev = "";
+    std::string id, prev = "";
 
     for (pugi::xml_node node = doc.child("dataset").child("routes_transport"); node; node = node.next_sibling()) {
         id = node.child("route_id").first_child().value();
         if (id == prev) {
-            temp.lenth += stof(node.child("stop_distance").first_child().value());
+            temp.lenth += std::stof(node.child("stop_distance").first_child().value());
             temp.stops_counter++;
         }
         else {
             if (prev != "")
                 routes.push_back(temp);
             temp.route_id = id;
-            temp.lenth = stof(node.child("stop_distance").first_child().value());
+            temp.lenth = std::stof(node.child("stop_distance").first_child().value());
             temp.stops_counter = 1;
             temp.transport_type = node.child("transport_type").first_child().value();
         }
@@ -62,79 +62,52 @@ Reader_routes::Reader_routes(){
     routes.push_back(temp);
 }
 
-void Reader_routes::max_lenth_route() const {
-    float max_train = 0, max_trolleybus = 0, max_bus = 0;
-    string train_route, trolleybus_route, bus_route;
+//fixed copy-paste
+
+void Reader_routes::max_route() const {
     Routes temp;
-    //todo copy-paste
+    std::string transport;
+    std::unordered_map<std::string, std::pair<std::string, unsigned int>> stops;
+    std::unordered_map<std::string, std::pair<std::string, float>> lenth;
     for (size_t i = 0; i < routes.size(); ++i) {
         temp = routes[i];
-        if (temp.transport_type == "Трамвай") {
-            if (temp.lenth > max_train) {
-                max_train = temp.lenth;
-                train_route = temp.route_id;
-            }
-        }
-        else if (temp.transport_type == "Автобус") {
-            if (temp.lenth > max_bus) {
-                max_bus = temp.lenth;
-                bus_route = temp.route_id;
-            }
+        transport = temp.transport_type;
+        auto iter = stops.find(transport);
+        if (iter == stops.end()) {
+            stops.insert({ transport, std::make_pair(temp.route_long_name, temp.stops_counter) });
+            lenth.insert({ transport, std::make_pair(temp.route_long_name, temp.lenth) });
         }
         else {
-            if (temp.lenth > max_trolleybus) {
-                max_trolleybus = temp.lenth;
-                trolleybus_route = temp.route_id;
+            if (temp.stops_counter > stops[transport].second) {
+                stops[transport].second = temp.stops_counter;
+                stops[transport].first = temp.route_id;
+            }
+            if (temp.lenth > lenth[transport].second) {
+                lenth[transport].second = temp.lenth;
+                lenth[transport].first = temp.route_id;
             }
         }
     }
 
-    cout << "Длиннейший маршрут:" << endl;
-    cout << "  Для Автобусов: " << bus_route << ". Длина: " << max_bus << "км" << endl;
-    cout << "  Для Трамваев: " << train_route << ". Длина: " << max_train << "км" << endl;
-    cout << "  Для Троллейбусов: " << trolleybus_route << ". Длина: " << max_trolleybus << "км" << endl;
-}
+    std::cout << "Маршрут с наибольшим количеством остановок:" << std::endl;
+    std::cout << "  Для Автобусов: " << stops["Автобус"].first << ". Кол-во остановок: " << stops["Автобус"].second << std::endl;
+    std::cout << "  Для Трамваев: " << stops["Трамвай"].first << ". Кол-во остановок: " << stops["Трамвай"].second << std::endl;
+    std::cout << "  Для Троллейбусов: " << stops["Троллейбус"].first << ". Кол-во остановок: " << stops["Троллейбус"].second << std::endl;
 
-void Reader_routes::max_stops_route() const {
-    int max_train = 0, max_trolleybus = 0, max_bus = 0;
-    string train_route, trolleybus_route, bus_route;
-    Routes temp;
-    for (size_t i = 0; i < routes.size(); ++i) {
-        temp = routes[i];
-        if (temp.transport_type == "Трамвай") {
-            if (temp.lenth > max_train) {
-                max_train = temp.stops_counter;
-                train_route = temp.route_id;
-            }
-        }
-        else if (temp.transport_type == "Автобус") {
-            if (temp.lenth > max_bus) {
-                max_bus = temp.stops_counter;
-                bus_route = temp.route_id;
-            }
-        }
-        else {
-            if (temp.lenth > max_trolleybus) {
-                max_trolleybus = temp.stops_counter;
-                trolleybus_route = temp.route_id;
-            }
-        }
-    }
-
-    cout << "Маршрут с наибольшим количеством остановок:" << endl;
-    cout << "  Для Автобусов: " << bus_route << ". Кол-во остановок: " << max_bus << endl;
-    cout << "  Для Трамваев: " << train_route << ". Кол-во остановок: " << max_train << endl;
-    cout << "  Для Троллейбусов: " << trolleybus_route << ". Кол-во остановок: " << max_trolleybus << endl;
+    std::cout << "Длиннейший маршрут:" << std::endl;
+    std::cout << "  Для Автобусов: " << lenth["Автобус"].first << ". Длина: " << lenth["Автобус"].second << "км" << std::endl;
+    std::cout << "  Для Трамваев: " << lenth["Трамвай"].first << ". Длина: " << lenth["Трамвай"].second << "км" << std::endl;
+    std::cout << "  Для Троллейбусов: " << lenth["Троллейбус"].first << ". Длина: " << lenth["Троллейбус"].second << "км" << std::endl;
 }
 
 Reader_stops::Reader_stops(){
     pugi::xml_parse_result result = doc.load_file("data/data_stops.xml");
     if (!result)
-        cout << "Smth strange" << endl;
+        std::cout << "Smth strange" << std::endl;
 
-    string temp;
-    vector <string> location;
-    vector <string> unnec = { "улица ", " улица", "проспект ", " проспект", "шоссе ", " шоссе", "Большая ", " Большая", "Малая ", " Малая", " пр", " ул", "ул ", "пр ", " ш", "ш ", " Б", "Б ", "М ", " М" };
+    std::string temp;
+    std::vector <std::string> location;
+    std::vector <std::string> unnec = { "улица ", " улица", "проспект ", " проспект", "шоссе ", " шоссе", "Большая ", " Большая", "Малая ", " Малая", " пр", " ул", "ул ", "пр ", " ш", "ш ", " Б", "Б ", "М ", " М" };
 
     size_t pos;
     int counter = 1;
@@ -145,7 +118,7 @@ Reader_stops::Reader_stops(){
 
         location.clear();
 
-        if (temp.find(",") != string::npos) {
+        if (temp.find(",") != std::string::npos) {
             splitstring spl = splitstring(temp);
             location = spl.split(',');
         }
@@ -160,19 +133,17 @@ Reader_stops::Reader_stops(){
             location[i].erase(remove(location[i].begin(), location[i].end(), '.'), location[i].end());
 
             for (size_t j = 0; j < unnec.size(); ++j) {
-                if ((pos = location[i].find(unnec[j])) != string::npos) {
+                if ((pos = location[i].find(unnec[j])) != std::string::npos) {
                     location[i].erase(pos, unnec[j].size());
                 }
             }
         }
 
         for (size_t i = 0; i < location.size(); ++i) {
-            string name = location[i];
+            std::string name = location[i];
             auto iter = streets.find(name);
             if (iter != streets.end()) {
-                int counter = streets[name] + 1;
-                streets.erase(iter);
-                streets.insert({ name, counter });
+                streets[name]++;
             }
             else
                 streets.insert({name, 1});
@@ -183,17 +154,16 @@ Reader_stops::Reader_stops(){
 
 void Reader_stops::max_street() const{
     auto x = std::max_element(streets.begin(), streets.end(),
-        [](const pair<string, int>& p1, const pair<string, int>& p2) {
+        [](const std::pair<std::string, int>& p1, const std::pair<std::string, int>& p2) {
             return p1.second < p2.second; });
-    cout << "Улица с наибольшим количеством остановок: " << x->first << ". Кол-во остановок: " << x->second << endl;
+    std::cout << "Улица с наибольшим количеством остановок: " << x->first << ". Кол-во остановок: " << x->second << std::endl;
 }
 
 void Magic_stick::do_all() const{
     SetConsoleOutputCP(CP_UTF8);
 
     Reader_routes reader_routes;
-    reader_routes.max_stops_route();
-    reader_routes.max_lenth_route();
+    reader_routes.max_route();
 
     Reader_stops reader_stops;
     reader_stops.max_street();

@@ -4,13 +4,12 @@
 #include "pugixml/pugixml.hpp"
 #include <unordered_map>
 
-//todo we dont use namespace std
-using namespace std;
+//fixed we dont use namespace std
 
 struct Routes {
-    string route_id;
-    string route_long_name;
-    string transport_type;
+    std::string route_id;
+    std::string route_long_name;
+    std::string transport_type;
     int stops_counter;
     float lenth;
 };
@@ -18,11 +17,10 @@ struct Routes {
 class Reader_routes {
 public:
     Reader_routes();
-    void max_lenth_route() const;
-    void max_stops_route() const;
+    void max_route() const;
 private:
     pugi::xml_document doc;
-    vector<Routes> routes;
+    std::vector<Routes> routes;
 };
 
 class Reader_stops {
@@ -31,7 +29,7 @@ public:
     void max_street() const;
 private:
     pugi::xml_document doc;
-    unordered_map<string, int> streets;
+    std::unordered_map<std::string, int> streets;
 };
 
 class Magic_stick {
