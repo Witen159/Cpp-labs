@@ -4,6 +4,7 @@
 #include "pugixml/pugixml.hpp"
 #include <unordered_map>
 
+//todo we dont use namespace std
 using namespace std;
 
 struct Routes {

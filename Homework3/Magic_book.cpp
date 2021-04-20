@@ -66,6 +66,7 @@ void Reader_routes::max_lenth_route() const {
     float max_train = 0, max_trolleybus = 0, max_bus = 0;
     string train_route, trolleybus_route, bus_route;
     Routes temp;
+    //todo copy-paste
     for (size_t i = 0; i < routes.size(); ++i) {
         temp = routes[i];
         if (temp.transport_type == "Трамвай") {
