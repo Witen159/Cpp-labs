@@ -161,7 +161,7 @@ public:
 
 	T& operator[](int index) const{
 		if (index > size_ - 1 || index < 0) {
-			throw std::logic_error("Wrong index");
+			throw std::range_error("Out of range");
 		}
 		else
 			return data_[index];
