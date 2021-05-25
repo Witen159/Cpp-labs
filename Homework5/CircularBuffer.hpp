@@ -3,6 +3,8 @@
 #include <iostream>
 #include <exception>
 
+//todo O(1)
+//todo size_t not int
 template <class T>
 class My_iterator {
 public:
@@ -153,12 +155,14 @@ public:
 			T* new_data = new T[new_capacity + 1];
 			for (int i = 0; i < size_; i++)
 				new_data[i] = data_[i];
+			//todo delete[]
 			delete data_;
 			data_ = new_data;
 			capacity_ = new_capacity + 1;
 		}
 	}
 
+	//todo more information in exceptions
 	T& operator[](int index) const{
 		if (index > size_ - 1 || index < 0) {
 			throw std::range_error("Out of range");
