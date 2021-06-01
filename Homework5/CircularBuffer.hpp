@@ -40,17 +40,23 @@ public:
 	}
 
 	My_iterator operator+(T value) {
-		index_ += value;
-		return *this;
+		My_iterator temp = *this;
+		temp.index_ += value;
+		return temp;
 	}
 
 	My_iterator operator-(T value) {
-		index_ -= value;
-		return *this;
+		My_iterator temp = *this;
+		temp.index_ -= value;
+		return temp;
 	}
 
 	T operator-(const My_iterator& obj) const {
 		return index_ - obj.index_;
+	}
+
+	T operator+(const My_iterator& obj) const {
+		return index_ + obj.index_;
 	}
 
 	bool operator==(const My_iterator& iter) const {
